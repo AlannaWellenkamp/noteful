@@ -1,27 +1,41 @@
-import React from 'react'
-import Note from '../Note/Note'
-import './NotePage.css'
+import React, { Component } from 'react';
+import Note from '../Note/Note';
+import NotesContext from '../../NotesContext';
+import { findNote } from '../../note-functions';
+import './NotePage.css';
 
-export default function NotePage(props) {
-
-    NotePage.defaultProps = {
-        note: {
-            content: '',
+class NotePage extends Component {
+    static defaultProps = {
+        match: {
+            params: {}
         }
     }
-    return (
-        <section className='NotePage'>
-            <Note
-                id={props.note.id}
-                name={props.note.name}
-                modified={props.note.modified}
-            />
-            <div className='NotePage--content'>
-                {props.note.content.split(/\n \r|\n/).map((para, i) =>
-                    <p key={i}>{para}</p>
-                )}
-            </div>
-        </section>
-    )
+    static contextType = NotesContext;
+
+    handleDelete = noteId => {
+        this.props.history.push(`/`)
+    }
+
+    render() {
+        const { notes = [] } = this.context
+        const { noteId } = this.props.match.params
+        const note = findNote(notes, noteId) || { content: '' }
+        return (
+            <section className='NotePageMain'>
+                <Note
+                    id={note.id}
+                    name={note.name}
+                    modified={note.modified}
+                    onDeleteNote={this.handleDelete}
+                />
+                <div className='NotePageMain--content'>
+                    {note.content.split(/\n \r|\n/).map((para, i) =>
+                        <p key={i}>{para}</p>
+                    )}
+                </div>
+            </section>
+        )
+    }
 }
 
+export default NotePage;

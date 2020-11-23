@@ -1,30 +1,44 @@
-import React from 'react'
-import ButtonComponent from '../ButtonComponent/ButtonComponent'
-import './NotePageNav.css'
+import React, { Component } from 'react';
+import ButtonComponent from '../ButtonComponent/ButtonComponent';
+import NotesContext from '../../NotesContext';
+import { findNote, findFolder } from '../../note-functions';
+import './NotePageNav.css';
 
-export default function NotePageNav(props) {
-
-    NotePageNav.defaultProps = {
+class NotePageNav extends Component {
+    static defaultProps = {
         history: {
             goBack: () => { }
+        },
+        match: {
+            params: {}
         }
     }
-    return (
-        <div className='NotePageNav'>
-            <ButtonComponent
-                tag='button'
-                role='link'
-                onClick={() => props.history.goBack()}
-                className='NotePageNav--return'
-            >
-                Back
-      </ButtonComponent>
-            {props.folder && (
-                <h3 className='NotePageNav--folder-name'>
-                    {props.folder.name}
-                </h3>
-            )}
-        </div>
-    )
+    static contextType = NotesContext;
+
+    render() {
+        const { notes, folders, } = this.context
+        const { noteId } = this.props.match.params
+        const note = findNote(notes, noteId) || {}
+        const folder = findFolder(folders, note.folderId)
+        return (
+            <div className='NotePageNav'>
+                <ButtonComponent
+                    tag='button'
+                    role='link'
+                    onClick={() => this.props.history.goBack()}
+                    className='NotePageNav__back-button'
+                >
+                    <br />
+            Back
+          </ButtonComponent>
+                {folder && (
+                    <h3 className='NotePageNav__folder-name'>
+                        {folder.name}
+                    </h3>
+                )}
+            </div>
+        )
+    }
 }
 
+export default NotePageNav;
