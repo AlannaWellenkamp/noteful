@@ -1,0 +1,23 @@
+.NoteListNav--list {
+    list-style-type: none;
+    margin: 130px 0 0;
+    padding: 0;
+}
+  
+ 
+.NoteListNav--folder-link {
+    background-color: black;
+    color: white;
+    display: block;
+    font-size: 18px;
+    margin: 0 0 8px auto;
+    padding: 6px 14px;
+    text-decoration: none;
+}
+  
+.NoteListNav--num-notes {
+    color: #adadad;
+    display: block;
+    float: right;
+}
+  
